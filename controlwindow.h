@@ -2,6 +2,7 @@
 #define CONTROLWINDOW_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 
 namespace Ui {
 class ControlWindow;
@@ -10,13 +11,32 @@ class ControlWindow;
 class ControlWindow : public QMainWindow
 {
     Q_OBJECT
-
+    friend class RenderingController;
+    friend class PhysicsController;
+    enum GPS { OX = 0, OY = 1, OZ = 2 };
+    enum Velocities { VX = 0, VY = 1, VZ = 2 };
+    enum Angles { ROLL = 0, PITCH = 1, YAW = 2 };
 public:
-    explicit ControlWindow(QWidget *parent = 0);
+    explicit ControlWindow(QObject* mainController);
     ~ControlWindow();
 
+    void updateData(qreal delta);
+    virtual void closeEvent(QCloseEvent* ev);
+
+signals:
+    void closed();
+
+protected: // setting up GraphWidgets
+    void setUpGPSGraph();
+    void setUpVelocityGraph();
+    void setUpAngleGraph();
+    void addGPSData();
+    void addVelocityData();
+
 private:
+    QObject* m_mainController;
     Ui::ControlWindow *ui;
+    qreal m_time;
 };
 
 #endif // CONTROLWINDOW_H

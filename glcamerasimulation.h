@@ -1,18 +1,24 @@
 #ifndef GLCAMERASIMULATION_H
 #define GLCAMERASIMULATION_H
 
-#include <QObject>
+#include "glcamera.h"
 
-class GLCameraSimulation : public QObject
+class GLCameraSimulation : public GLCamera
 {
     Q_OBJECT
 public:
-    explicit GLCameraSimulation(QObject *parent = 0);
+    explicit GLCameraSimulation();
 
-signals:
+    virtual QMatrix4x4 getProjectionMatrix();
 
-public slots:
+    void setViewAngle(qreal viewAngle);
+    void setMinDist(qreal minDist);
+    void setMaxDist(qreal maxDist);
 
+private:
+    qreal m_viewAngle;
+    qreal m_minDist;
+    qreal m_maxDist;
 };
 
 #endif // GLCAMERASIMULATION_H

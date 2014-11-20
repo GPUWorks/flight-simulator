@@ -1,11 +1,10 @@
-#include "controlwindow.h"
+#include "maincontroller.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    ControlWindow w;
-    w.show();
-
-    return a.exec();
+    QApplication application(argc, argv);
+    MainController controller;
+    controller.start();
+    return application.exec();
 }

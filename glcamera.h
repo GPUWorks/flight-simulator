@@ -10,40 +10,28 @@ class GLCamera : public QObject
 {
     Q_OBJECT
 public:
-    explicit GLCamera(): QObject(nullptr){}
+    explicit GLCamera(QObject* parent = nullptr);
+    virtual ~GLCamera();
 
-    virtual QMatrix4x4 getProjectionMatrix() {
-        throw std::logic_error("Method with no definition");
-    }
+    virtual QMatrix4x4 getProjectionMatrix();
 
-    virtual void setYaw(qreal yaw) {
-        m_yaw = yaw;
-    }
+    void setViewAngle(qreal viewAngle);
+    void setMinDist(qreal minDist);
+    void setMaxDist(qreal maxDist);
 
-    virtual qreal yaw() {
-        return m_yaw;
-    }
+    QVector3D pos();
 
-    virtual void setPitch(qreal pitch) {
-        m_pitch = pitch;
-    }
+    virtual void setYaw(qreal yaw);
+    virtual qreal yaw();
 
-    virtual qreal pitch() {
-        return m_pitch;
-    }
+    virtual void setPitch(qreal pitch);
+    virtual qreal pitch();
 
-    virtual void addCameraPos(QVector3D arg) {
-        m_cameraPos += arg;
-    }
+    virtual void addCameraPos(QVector3D arg);
+    virtual void subCameraPos(QVector3D arg);
+    void setCameraPos(QVector3D arg);
 
-    virtual void subCameraPos(QVector3D arg) {
-        m_cameraPos -= arg;
-    }
-
-    virtual void resize(int width, int height) {
-        m_width = width;
-        m_height = height;
-    }
+    virtual void resize(int width, int height);
 
 protected:
     qreal m_yaw;
@@ -52,6 +40,10 @@ protected:
 
     int m_width;
     int m_height;
+
+    qreal m_viewAngle;
+    qreal m_minDist;
+    qreal m_maxDist;
 };
 
 #endif // GLCAMERA_H

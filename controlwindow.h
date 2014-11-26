@@ -11,7 +11,7 @@ class ControlWindow;
 class ControlWindow : public QMainWindow
 {
     Q_OBJECT
-    friend class RenderingController;
+    friend class MainController;
     friend class PhysicsController;
     enum GPS { OX = 0, OY = 1, OZ = 2 };
     enum Velocities { VX = 0, VY = 1, VZ = 2 };

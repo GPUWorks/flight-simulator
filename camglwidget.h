@@ -3,17 +3,24 @@
 
 #include <QGLWidget>
 #include <QCloseEvent>
+#include "globject.h"
+#include "glcamera1stperson.h"
+#include "glcamera3rdperson.h"
+#include <QTimer>
+#include <QScopedPointer>
+#include <QSharedPointer>
+#include <QMutex>
+#include <QList>
 
 class CamGLWidget : public QGLWidget
 {
     Q_OBJECT
+    enum Camera { FirstPersonView, ThirdPersonView };
 public:
-    explicit CamGLWidget(QWidget *parent = nullptr);
-
-    void setEvents(bool state);
+    explicit CamGLWidget(QObject* parent);
+    void start();
 
     virtual void initializeGL();
-    virtual void resizeGL(int w, int h);
     virtual void paintGL();
 
     virtual void mousePressEvent(QMouseEvent* ev);
@@ -24,17 +31,22 @@ public:
 
 signals:
     void closed();
-    void mousePress(QMouseEvent*);
-    void mouseMove(QMouseEvent*);
-    void keyPress(QKeyEvent*);
 
 public slots:
-    void mousePressSlot(QMouseEvent* ev);
-    void mouseMoveSlot(QMouseEvent* ev);
-    void keyPressSlot(QKeyEvent* ev);
+    void setCamera1stPerson();
+    void setCamera3rdPerson();
+    void render();
 
 private:
-    bool m_events;
+    QObject* m_mainController;
+    QList< QSharedPointer<GLObject> >* m_objects;
+    GLCamera1stPerson* m_camera1stPerson;
+    GLCamera3rdPerson* m_camera3rdPerson;
+    QList< GLCamera* > m_cameraList;
+    Camera m_type;
+    QScopedPointer<QTimer> m_renderingTimer;
+    QMutex* m_objectsMutex;
+    QVector3D pmouse;
 };
 
 #endif // CAMGLWIDGET_H

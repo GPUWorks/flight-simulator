@@ -88,6 +88,32 @@
              </layout>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="CameraGroupBox">
+             <property name="title">
+              <string>Camera</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <item row="0" column="0" alignment="Qt::AlignHCenter">
+               <widget class="QRadioButton" name="tpvButton">
+                <property name="text">
+                 <string>3rd person view</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" alignment="Qt::AlignHCenter">
+               <widget class="QRadioButton" name="fpvButton">
+                <property name="text">
+                 <string>1st person view</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
            <item row="1" column="0">
             <widget class="QGroupBox" name="AnglesGroupBox">
              <property name="title">
@@ -96,18 +122,6 @@
              <layout class="QGridLayout" name="gridLayout_6">
               <item row="0" column="0">
                <widget class="GraphWidget" name="AnglesGLWidget" native="true"/>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QGroupBox" name="CameraGroupBox">
-             <property name="title">
-              <string>Camera</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_7">
-              <item row="0" column="0">
-               <widget class="CamGLWidget" name="CameraGLWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -650,12 +664,6 @@
    <class>GraphWidget</class>
    <extends>QWidget</extends>
    <header>graphwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>CamGLWidget</class>
-   <extends>QWidget</extends>
-   <header>camglwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

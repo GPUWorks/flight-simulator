@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/shaders">
+        <file>landscape.frag.glsl</file>
+        <file>landscape.vert.glsl</file>
+    </qresource>
+</RCC>

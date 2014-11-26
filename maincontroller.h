@@ -12,15 +12,14 @@
 #include "controlwindow.h"
 #include "globject.h"
 #include "physicscontroller.h"
-#include "renderingcontroller.h"
 #include "camglwidget.h"
 #include <QMutex>
 
 class MainController : public QObject
 {
     Q_OBJECT
-    friend class RenderingController;
     friend class PhysicsController;
+    friend class CamGLWidget;
 public:
     explicit MainController(QObject* parent = nullptr);
     ~MainController();
@@ -47,9 +46,6 @@ private: // general members
 private: // physics engine
     PhysicsController* m_physController;
     QThread* m_physicsThread;
-
-private: // 3D engine
-    RenderingController* m_renderController;
 };
 
 #endif // MAINCONTROLLER_H

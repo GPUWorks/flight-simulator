@@ -18,29 +18,38 @@ SOURCES += main.cpp\
     graphwidget.cpp \
     camglwidget.cpp \
     maincontroller.cpp \
-    renderingcontroller.cpp \
     physicscontroller.cpp \
     globjectfactory.cpp \
     landscapefactory.cpp \
-    glcamerasimulation.cpp \
     landscapeobject.cpp \
     registry.cpp \
     lib/qcustomplot.cpp \
-    glcamera.cpp
+    glcamera.cpp \
+    glcamera3rdperson.cpp \
+    glcamera1stperson.cpp \
+    gllight.cpp
 
 HEADERS  += controlwindow.h \
     graphwidget.h \
     camglwidget.h \
     maincontroller.h \
     registry.h \
-    renderingcontroller.h \
     physicscontroller.h \
     globject.h \
     globjectfactory.h \
     landscapefactory.h \
-    glcamerasimulation.h \
     glcamera.h \
     landscapeobject.h \
-    lib/qcustomplot.h
+    lib/qcustomplot.h \
+    glcamera3rdperson.h \
+    glcamera1stperson.h \
+    gllight.h
 
 FORMS    += controlwindow.ui
+
+OTHER_FILES += \
+    landscape.vert.glsl \
+    landscape.frag.glsl
+
+RESOURCES += \
+    res.qrc

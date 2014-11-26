@@ -11,6 +11,9 @@
 
 #include <QObject> // for `qreal`
 #define SEC 1000.0
+#define DELTA 0.01
+#define MOUSE_SENSITIVITY 0.005
+#define KEY_SENSITIVITY 0.5
 
 class Registry
 {

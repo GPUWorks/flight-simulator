@@ -8,7 +8,7 @@
 class GLObjectFactory
 {
 public:
-    enum Type { LANDSCAPE };
+    enum Type { LANDSCAPE, QUADROTOR };
 public:
     GLObjectFactory();
     virtual ~GLObjectFactory();

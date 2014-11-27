@@ -6,6 +6,7 @@
 #include "globject.h"
 #include "glcamera1stperson.h"
 #include "glcamera3rdperson.h"
+#include "quadrotorobject.h"
 #include <QTimer>
 #include <QScopedPointer>
 #include <QSharedPointer>
@@ -40,6 +41,7 @@ public slots:
 private:
     QObject* m_mainController;
     QList< QSharedPointer<GLObject> >* m_objects;
+    QuadrotorObject* m_quadrotor;
     GLCamera1stPerson* m_camera1stPerson;
     GLCamera3rdPerson* m_camera3rdPerson;
     QList< GLCamera* > m_cameraList;

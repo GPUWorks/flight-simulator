@@ -48,11 +48,11 @@ void LandscapeObject::loadShaders()
 
 void LandscapeObject::terrainGen()
 {
-    m_data.push_back(-10);m_data.push_back(-10);m_data.push_back(0);
-    m_data.push_back(-10);m_data.push_back(+10);m_data.push_back(0);
-    m_data.push_back(+10);m_data.push_back(-10);m_data.push_back(0);
+    m_data.push_back(-100);m_data.push_back(-100);m_data.push_back(0);
+    m_data.push_back(-100);m_data.push_back(+100);m_data.push_back(0);
+    m_data.push_back(+100);m_data.push_back(-100);m_data.push_back(0);
 
-    m_data.push_back(+10);m_data.push_back(-10);m_data.push_back(0);
-    m_data.push_back(-10);m_data.push_back(+10);m_data.push_back(0);
-    m_data.push_back(+10);m_data.push_back(+10);m_data.push_back(0);
+    m_data.push_back(+100);m_data.push_back(-100);m_data.push_back(0);
+    m_data.push_back(-100);m_data.push_back(+100);m_data.push_back(0);
+    m_data.push_back(+100);m_data.push_back(+100);m_data.push_back(0);
 }

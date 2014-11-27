@@ -11,6 +11,7 @@ CamGLWidget::CamGLWidget(QObject* parent):
 {
     MainController* mainController = dynamic_cast<MainController*>(parent);
     m_objects = &(mainController->m_objects);
+    m_quadrotor = dynamic_cast<QuadrotorObject*>(m_objects->front().data());
     m_objectsMutex = &(mainController->m_objectsMutex);
     m_type = Camera::ThirdPersonView;
     connect(m_renderingTimer.data(), SIGNAL(timeout()), this, SLOT(render()));
@@ -33,7 +34,7 @@ void CamGLWidget::initializeGL()
     m_camera1stPerson->setMaxDist(Registry::qoCameraViewDistance);
     m_camera1stPerson->setViewAngle(Registry::qoCameraViewAngle);
     m_camera1stPerson->resize(width(), height());
-    m_camera1stPerson->setCameraPos(QVector3D(2, 2, 4));
+    m_camera1stPerson->setCameraPos(QVector3D(0, 10, 12));
 
     foreach (auto object, *m_objects) {
         object->init();
@@ -77,25 +78,13 @@ void CamGLWidget::mousePressEvent(QMouseEvent* ev)
 
 void CamGLWidget::mouseMoveEvent(QMouseEvent* ev)
 {
-    GLCamera* camera = nullptr;
-    GLCamera* camera2 = nullptr;
-    if(m_type == FirstPersonView) {
-        camera = m_camera1stPerson;
-        camera2 = m_camera3rdPerson;
-    } else {
-        camera = m_camera3rdPerson;
-        camera2 = m_camera1stPerson;
-    }
+    GLCamera* camera = m_camera3rdPerson;
 
     if(ev->buttons()) {
         camera->setYaw( camera->yaw() + ( ev->x() - pmouse.x() ) * MOUSE_SENSITIVITY );
         camera->setPitch( clamp( camera->pitch() - (ev->y() - pmouse.y()) * MOUSE_SENSITIVITY,
                                -M_PI / 2 + DELTA,
                                 M_PI / 2 - DELTA) );
-
-        camera2->setCameraPos(camera->pos());
-        camera2->setPitch(camera->pitch());
-        camera2->setYaw(camera->yaw());
     }
     pmouse.setX(ev->x());
     pmouse.setY(ev->y());
@@ -103,15 +92,7 @@ void CamGLWidget::mouseMoveEvent(QMouseEvent* ev)
 
 void CamGLWidget::keyPressEvent(QKeyEvent* ev)
 {
-    GLCamera* camera = nullptr;
-    GLCamera* camera2 = nullptr;
-    if(m_type == FirstPersonView) {
-        camera = m_camera1stPerson;
-        camera2 = m_camera3rdPerson;
-    } else {
-        camera = m_camera3rdPerson;
-        camera2 = m_camera1stPerson;
-    }
+    GLCamera* camera = m_camera3rdPerson;
 
     if(ev->key() == Qt::Key_Up || ev->key() == Qt::Key_W) {
         QVector3D to(qSin(camera->yaw()) * qCos(camera->pitch()),
@@ -129,11 +110,25 @@ void CamGLWidget::keyPressEvent(QKeyEvent* ev)
     } else if(ev->key() == Qt::Key_Right || ev->key() == Qt::Key_D) {
         QVector3D to(qCos(camera->yaw()), -qSin(camera->yaw()), 0);
         camera->addCameraPos( to * KEY_SENSITIVITY );
+    } else if(ev->key() == Qt::Key_U) {
+        // decrease pitch angle
+        m_quadrotor->setPitch( m_quadrotor->pitch() - 0.5 );
+    } else if(ev->key() == Qt::Key_J) {
+        // decrease pitch angle
+        m_quadrotor->setPitch( m_quadrotor->pitch() + 0.5 );
+    } else if(ev->key() == Qt::Key_H) {
+        // decrease pitch angle
+        m_quadrotor->setRoll( m_quadrotor->roll() - 0.5 );
+    } else if(ev->key() == Qt::Key_K) {
+        // decrease pitch angle
+        m_quadrotor->setRoll( m_quadrotor->roll() + 0.5 );
+    } else if(ev->key() == Qt::Key_Y) {
+        // decrease pitch angle
+        m_quadrotor->setYaw( m_quadrotor->yaw() - 0.5 );
+    } else if(ev->key() == Qt::Key_I) {
+        // decrease pitch angle
+        m_quadrotor->setYaw( m_quadrotor->yaw() + 0.5 );
     }
-
-    camera2->setCameraPos(camera->pos());
-    camera2->setPitch(camera->pitch());
-    camera2->setYaw(camera->yaw());
 }
 
 void CamGLWidget::closeEvent(QCloseEvent* ev)

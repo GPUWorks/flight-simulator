@@ -1,5 +1,6 @@
 #include "controlwindow.h"
 #include "ui_controlwindow.h"
+#include "maincontroller.h"
 
 ControlWindow::ControlWindow(QObject* mainController) :
     QMainWindow(nullptr),
@@ -12,7 +13,7 @@ ControlWindow::ControlWindow(QObject* mainController) :
     m_time = 0.0;
     setUpGPSGraph();
     setUpVelocityGraph();
-    // TODO: add other properties
+    setUpAngleGraph();
 }
 
 ControlWindow::~ControlWindow()
@@ -26,26 +27,33 @@ void ControlWindow::closeEvent(QCloseEvent* ev)
     emit closed();
 }
 
+void ControlWindow::setUpQuadrotorPointer()
+{
+    m_quadrotor = dynamic_cast<QuadrotorObject*>( dynamic_cast<MainController*>(m_mainController)->m_objects.front().data() );
+}
+
 void ControlWindow::updateData(qreal delta)
 {
     qDebug("update gps data");
     m_time += (delta / 1000.0);
     addGPSData();
     addVelocityData();
+    addAngleData();
 }
 
 void ControlWindow::addGPSData()
 {
-    ui->GPSGLWidget->graph(OX)->addData(m_time, qSin(m_time));
-    ui->GPSGLWidget->graph(OY)->addData(m_time, 2*qSin(m_time + M_PI / 3));
-    ui->GPSGLWidget->graph(OZ)->addData(m_time, qSin(m_time + 2 * M_PI / 3));
+    QVector3D pos = m_quadrotor->pos();
+    ui->GPSGLWidget->graph(OX)->addData(m_time, pos.x());
+    ui->GPSGLWidget->graph(OY)->addData(m_time, pos.y());
+    ui->GPSGLWidget->graph(OZ)->addData(m_time, pos.z());
     // remove data of lines that's outside visible range:
     ui->GPSGLWidget->graph(OX)->removeDataBefore(m_time-5);
     ui->GPSGLWidget->graph(OY)->removeDataBefore(m_time-5);
     ui->GPSGLWidget->graph(OZ)->removeDataBefore(m_time-5);
     // rescale value (vertical) axis to fit the current data:
-    ui->GPSGLWidget->graph(OX)->rescaleValueAxis(false);
-    ui->GPSGLWidget->graph(OY)->rescaleValueAxis(false);
+    ui->GPSGLWidget->graph(OX)->rescaleValueAxis(true);
+    ui->GPSGLWidget->graph(OY)->rescaleValueAxis(true);
     ui->GPSGLWidget->graph(OZ)->rescaleValueAxis(true);
     // make key axis range scroll with the data (at a constant range size of 5):
     ui->GPSGLWidget->xAxis->setRange(m_time+0.25, 5, Qt::AlignRight);
@@ -54,20 +62,38 @@ void ControlWindow::addGPSData()
 
 void ControlWindow::addVelocityData()
 {
-    ui->VelocitiesGLWidget->graph(VX)->addData(m_time, qSin(m_time) + (qrand()%10) / 10.0);
-    ui->VelocitiesGLWidget->graph(VY)->addData(m_time, 2*qSin(m_time + M_PI / 3) + (qrand()%10) / 10.0);
-    ui->VelocitiesGLWidget->graph(VZ)->addData(m_time, qSin(m_time + 2 * M_PI / 3) + (qrand()%10) / 10.0);
+    ui->VelocitiesGLWidget->graph(VX)->addData(m_time, 0);
+    ui->VelocitiesGLWidget->graph(VY)->addData(m_time, 0);
+    ui->VelocitiesGLWidget->graph(VZ)->addData(m_time, 0);
     // remove data of lines that's outside visible range:
     ui->VelocitiesGLWidget->graph(VX)->removeDataBefore(m_time-5);
     ui->VelocitiesGLWidget->graph(VY)->removeDataBefore(m_time-5);
     ui->VelocitiesGLWidget->graph(VZ)->removeDataBefore(m_time-5);
     // rescale value (vertical) axis to fit the current data:
-    ui->VelocitiesGLWidget->graph(VX)->rescaleValueAxis(false);
-    ui->VelocitiesGLWidget->graph(VY)->rescaleValueAxis(false);
+    ui->VelocitiesGLWidget->graph(VX)->rescaleValueAxis(true);
+    ui->VelocitiesGLWidget->graph(VY)->rescaleValueAxis(true);
     ui->VelocitiesGLWidget->graph(VZ)->rescaleValueAxis(true);
     // make key axis range scroll with the data (at a constant range size of 5):
     ui->VelocitiesGLWidget->xAxis->setRange(m_time+0.25, 5, Qt::AlignRight);
     ui->VelocitiesGLWidget->replot();
+}
+
+void ControlWindow::addAngleData()
+{
+    ui->AnglesGLWidget->graph(ROLL)->addData(m_time, m_quadrotor->roll());
+    ui->AnglesGLWidget->graph(PITCH)->addData(m_time, m_quadrotor->pitch());
+    ui->AnglesGLWidget->graph(YAW)->addData(m_time, m_quadrotor->yaw());
+    // remove data of lines that's outside visible range:
+    ui->AnglesGLWidget->graph(ROLL)->removeDataBefore(m_time-5);
+    ui->AnglesGLWidget->graph(PITCH)->removeDataBefore(m_time-5);
+    ui->AnglesGLWidget->graph(YAW)->removeDataBefore(m_time-5);
+    // rescale value (vertical) axis to fit the current data:
+    ui->AnglesGLWidget->graph(ROLL)->rescaleValueAxis(true);
+    ui->AnglesGLWidget->graph(PITCH)->rescaleValueAxis(true);
+    ui->AnglesGLWidget->graph(YAW)->rescaleValueAxis(true);
+    // make key axis range scroll with the data (at a constant range size of 5):
+    ui->AnglesGLWidget->xAxis->setRange(m_time+0.25, 5, Qt::AlignRight);
+    ui->AnglesGLWidget->replot();
 }
 
 void ControlWindow::setUpGPSGraph()
@@ -106,5 +132,17 @@ void ControlWindow::setUpVelocityGraph()
 
 void ControlWindow::setUpAngleGraph()
 {
+    ui->AnglesGLWidget->setBackground(QBrush(QColor("#e3e3e3")));
 
+    ui->AnglesGLWidget->addGraph();
+    ui->AnglesGLWidget->graph(ROLL)->setPen(QPen(Qt::blue));
+
+    ui->AnglesGLWidget->addGraph();
+    ui->AnglesGLWidget->graph(PITCH)->setPen(QPen(Qt::red));
+
+    ui->AnglesGLWidget->addGraph();
+    ui->AnglesGLWidget->graph(YAW)->setPen(QPen(Qt::green));
+
+    ui->AnglesGLWidget->xAxis->setTickLabelType(QCPAxis::ltNumber);
+    ui->AnglesGLWidget->axisRect()->setupFullAxesBox();
 }

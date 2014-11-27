@@ -20,6 +20,7 @@ class MainController : public QObject
     Q_OBJECT
     friend class PhysicsController;
     friend class CamGLWidget;
+    friend class ControlWindow;
 public:
     explicit MainController(QObject* parent = nullptr);
     ~MainController();

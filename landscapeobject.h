@@ -14,7 +14,6 @@ public:
     ~LandscapeObject();
 
     virtual void init();
-
     virtual void render(QMatrix4x4 projection, QVector3D eyePos);
 
 private:

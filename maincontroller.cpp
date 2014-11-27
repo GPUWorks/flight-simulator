@@ -45,6 +45,11 @@ void MainController::restartApp()
 
 void MainController::initialization()
 {
+    QSharedPointer<GLObjectFactory> quadrotorFactory = GLObjectFactory::createFactory( GLObjectFactory::QUADROTOR );
+    m_objects.push_back( QSharedPointer<GLObject>(quadrotorFactory->createObject()) );
+
+    m_controlWindow->setUpQuadrotorPointer();
+
     QSharedPointer<GLObjectFactory> landscapeFactory = GLObjectFactory::createFactory( GLObjectFactory::LANDSCAPE );
     m_objects.push_back( QSharedPointer<GLObject>(landscapeFactory->createObject()) );
 }

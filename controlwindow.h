@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QCloseEvent>
+#include "quadrotorobject.h"
 
 namespace Ui {
 class ControlWindow;
@@ -19,6 +20,7 @@ class ControlWindow : public QMainWindow
 public:
     explicit ControlWindow(QObject* mainController);
     ~ControlWindow();
+    void setUpQuadrotorPointer();
 
     void updateData(qreal delta);
     virtual void closeEvent(QCloseEvent* ev);
@@ -32,11 +34,13 @@ protected: // setting up GraphWidgets
     void setUpAngleGraph();
     void addGPSData();
     void addVelocityData();
+    void addAngleData();
 
 private:
     QObject* m_mainController;
     Ui::ControlWindow *ui;
     qreal m_time;
+    QuadrotorObject* m_quadrotor;
 };
 
 #endif // CONTROLWINDOW_H

@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     glcamera.cpp \
     glcamera3rdperson.cpp \
     glcamera1stperson.cpp \
-    gllight.cpp
+    gllight.cpp \
+    quadrotorfactory.cpp \
+    quadrotorobject.cpp
 
 HEADERS  += controlwindow.h \
     graphwidget.h \
@@ -43,13 +45,17 @@ HEADERS  += controlwindow.h \
     lib/qcustomplot.h \
     glcamera3rdperson.h \
     glcamera1stperson.h \
-    gllight.h
+    gllight.h \
+    quadrotorfactory.h \
+    quadrotorobject.h
 
 FORMS    += controlwindow.ui
 
 OTHER_FILES += \
     landscape.vert.glsl \
-    landscape.frag.glsl
+    landscape.frag.glsl \
+    quadrotor.vert.glsl \
+    quadrotor.frag.glsl
 
 RESOURCES += \
     res.qrc

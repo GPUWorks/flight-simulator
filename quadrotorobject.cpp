@@ -1,6 +1,8 @@
 #include "quadrotorobject.h"
 #include <QtMath>
 
+#define UNIT_ANGLE 6
+
 QuadrotorObject::QuadrotorObject()
 {
     m_pitch = m_roll = m_yaw = 0.0;
@@ -23,7 +25,7 @@ void QuadrotorObject::init()
     m_prog.release();
 }
 
-void QuadrotorObject::render(QMatrix4x4 projection, QVector3D eyePos)
+void QuadrotorObject::render(QMatrix4x4 MVP, QVector3D eyePos)
 {
     Q_UNUSED(eyePos)
 
@@ -35,14 +37,7 @@ void QuadrotorObject::render(QMatrix4x4 projection, QVector3D eyePos)
     m_prog.setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
     m_buffer.release();
 
-    QMatrix4x4 MVP = projection;
-    MVP.translate(m_center);
-    MVP.rotate(QQuaternion(qCos(m_pitch / 2), qSin(m_pitch / 2) * QVector3D(1,0,0)));
-    MVP.rotate(QQuaternion(qCos(m_roll  / 2), qSin(m_roll  / 2) * QVector3D(0,1,0)));
-    MVP.rotate(QQuaternion(qCos(m_yaw   / 2), qSin(m_yaw   / 2) * QVector3D(0,0,1)));
-    MVP.translate(-m_center);
-
-    m_prog.setUniformValue("MVP", MVP);
+    m_prog.setUniformValue("MVP", MVP * ROT);
 
     glDrawArrays(GL_TRIANGLES, 0, m_data.size());
 
@@ -101,46 +96,61 @@ void QuadrotorObject::terrainGen()
     m_data.push_back(-2);m_data.push_back(0);m_data.push_back(10);
 }
 
-void QuadrotorObject::setYaw(qreal yaw)
-{
-    if(yaw >= 2 * M_PI)
-        yaw -= (2 * M_PI);
-    else if(yaw <= -2 * M_PI)
-        yaw += (2 * M_PI);
-    m_yaw = yaw;
-}
-
 qreal QuadrotorObject::yaw()
 {
-    return m_yaw;
+    const float* ROTmat = ROT.data();
+    return atan(ROTmat[4] / ROTmat[0]);
 }
 
-void QuadrotorObject::setPitch(qreal pitch)
+void QuadrotorObject::changeYaw(char op)
 {
-    if(pitch >= 2 * M_PI)
-        pitch -= (2 * M_PI);
-    else if(pitch <= -2 * M_PI)
-        pitch += (2 * M_PI);
-    m_pitch = pitch;
+    qreal angle = ( op == '+' ? UNIT_ANGLE : -UNIT_ANGLE );
+    ROT.translate(m_center);
+    ROT.rotate(angle, 0, 0, 1);
+    ROT.translate(-m_center);
+    m_yaw -= angle;
+    if(m_yaw <= -180)
+        m_yaw += 360;
+    else if(m_yaw >= 180)
+        m_yaw -= 360;
 }
 
 qreal QuadrotorObject::pitch()
 {
-    return m_pitch;
+    const float* ROTmat = ROT.data();
+    return atan( ROTmat[8] / sqrt( pow(ROTmat[9], 2) + pow(ROTmat[10], 2) ) );
 }
 
-void QuadrotorObject::setRoll(qreal roll)
+void QuadrotorObject::changePitch(char op)
 {
-    if(roll >= 2 * M_PI)
-        roll -= (2 * M_PI);
-    else if(roll <= -2 * M_PI)
-        roll += (2 * M_PI);
-    m_roll = roll;
+    qreal angle = ( op == '+' ? UNIT_ANGLE : -UNIT_ANGLE );
+    ROT.translate(m_center);
+    ROT.rotate(angle, 1, 0, 0);
+    ROT.translate(-m_center);
+    m_pitch -= angle;
+    if(m_pitch <= -180)
+        m_pitch += 360;
+    else if(m_pitch >= 180)
+        m_pitch -= 360;
 }
 
 qreal QuadrotorObject::roll()
 {
-    return m_roll;
+    const float* ROTmat = ROT.data();
+    return atan( ROTmat[9] / ROTmat[10] );
+}
+
+void QuadrotorObject::changeRoll(char op)
+{
+    qreal angle = ( op == '+' ? UNIT_ANGLE : -UNIT_ANGLE );
+    ROT.translate(m_center);
+    ROT.rotate(angle, 0, 1, 0);
+    ROT.translate(-m_center);
+    m_roll -= angle;
+    if(m_roll <= -180)
+        m_roll += 360;
+    else if(m_roll >= 180)
+        m_roll -= 360;
 }
 
 void QuadrotorObject::setPos(QVector3D pos)

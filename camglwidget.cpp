@@ -112,22 +112,22 @@ void CamGLWidget::keyPressEvent(QKeyEvent* ev)
         camera->addCameraPos( to * KEY_SENSITIVITY );
     } else if(ev->key() == Qt::Key_U) {
         // decrease pitch angle
-        m_quadrotor->setPitch( m_quadrotor->pitch() - 0.5 );
+        m_quadrotor->changePitch('-');
     } else if(ev->key() == Qt::Key_J) {
-        // decrease pitch angle
-        m_quadrotor->setPitch( m_quadrotor->pitch() + 0.5 );
+        // increase pitch angle
+        m_quadrotor->changePitch('+');
     } else if(ev->key() == Qt::Key_H) {
-        // decrease pitch angle
-        m_quadrotor->setRoll( m_quadrotor->roll() - 0.5 );
+        // decrease roll angle
+        m_quadrotor->changeRoll('-');
     } else if(ev->key() == Qt::Key_K) {
-        // decrease pitch angle
-        m_quadrotor->setRoll( m_quadrotor->roll() + 0.5 );
+        // increase roll angle
+        m_quadrotor->changeRoll('+');
     } else if(ev->key() == Qt::Key_Y) {
-        // decrease pitch angle
-        m_quadrotor->setYaw( m_quadrotor->yaw() - 0.5 );
+        // decrease yaw angle
+        m_quadrotor->changeYaw('-');
     } else if(ev->key() == Qt::Key_I) {
-        // decrease pitch angle
-        m_quadrotor->setYaw( m_quadrotor->yaw() + 0.5 );
+        // increase yaw angle
+        m_quadrotor->changeYaw('+');
     }
 }
 

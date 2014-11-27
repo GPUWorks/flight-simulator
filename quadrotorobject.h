@@ -16,14 +16,14 @@ public:
     virtual void init();
     virtual void render(QMatrix4x4 projection, QVector3D eyePos);
 
-    void setYaw(qreal yaw);
     qreal yaw();
+    void changeYaw(char op);
 
-    void setPitch(qreal pitch);
     qreal pitch();
+    void changePitch(char op);
 
-    void setRoll(qreal roll);
     qreal roll();
+    void changeRoll(char op);
 
     void setPos(QVector3D pos);
     QVector3D pos();
@@ -43,6 +43,7 @@ private:
     qreal m_roll;
     qreal m_yaw;
     QVector3D m_center;
+    QMatrix4x4 ROT;
 };
 
 #endif // QUADROTOROBJECT_H

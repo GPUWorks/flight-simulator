@@ -9,6 +9,10 @@ GLCamera3rdPerson::GLCamera3rdPerson()
     m_phi = M_PI / 6;
 }
 
+GLCamera3rdPerson::~GLCamera3rdPerson()
+{
+}
+
 QMatrix4x4 GLCamera3rdPerson::getProjectionMatrix()
 {
     QMatrix4x4 mat;
@@ -34,9 +38,48 @@ void GLCamera3rdPerson::setCenter(QVector3D center)
     m_center = center;
 }
 
+QVector3D GLCamera3rdPerson::center()
+{
+    return m_center;
+}
+
+void GLCamera3rdPerson::setR(qreal r)
+{
+    m_R = r;
+}
+
+qreal GLCamera3rdPerson::R()
+{
+    return m_R;
+}
+
+void GLCamera3rdPerson::setTheta(qreal theta)
+{
+    m_theta = theta;
+}
+
+qreal GLCamera3rdPerson::theta()
+{
+    return m_theta;
+}
+
+void GLCamera3rdPerson::setPhi(qreal phi)
+{
+    m_phi = phi;
+}
+
+qreal GLCamera3rdPerson::phi()
+{
+    return m_phi;
+}
+
 void GLCamera3rdPerson::addR(qreal delta)
 {
     m_R += delta;
+    if(m_R < 5)
+        m_R -= delta;
+    else if(m_R * qCos(m_theta) + m_center.z() < 0.5)
+        m_R -= delta;
 }
 
 void GLCamera3rdPerson::addTheta(qreal delta)

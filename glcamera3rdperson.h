@@ -9,12 +9,24 @@ class GLCamera3rdPerson : public GLCamera
     Q_OBJECT
 public:
     explicit GLCamera3rdPerson();
+    ~GLCamera3rdPerson();
 
     void setCenter(QVector3D center);
+    QVector3D center();
+
+    void setR(qreal r);
+    qreal R();
+
+    void setTheta(qreal theta);
+    qreal theta();
+
+    void setPhi(qreal phi);
+    qreal phi();
 
     void addR(qreal delta);
     void addTheta(qreal delta);
     void addPhi(qreal delta);
+
 
     virtual QMatrix4x4 getProjectionMatrix();
 

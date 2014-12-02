@@ -6,7 +6,7 @@
 
 QT       += core gui opengl
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport testlib
 
 TARGET = OOP_Quadrotor_Project
 TEMPLATE = app
@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     gllight.cpp \
     quadrotorfactory.cpp \
     quadrotorobject.cpp \
-    force.cpp
+    force.cpp \
+    tests/test3rdpersoncamera.cpp
 
 HEADERS  += controlwindow.h \
     graphwidget.h \
@@ -49,7 +50,8 @@ HEADERS  += controlwindow.h \
     gllight.h \
     quadrotorfactory.h \
     quadrotorobject.h \
-    force.h
+    force.h \
+    tests/test3rdpersoncamera.h
 
 FORMS    += controlwindow.ui
 

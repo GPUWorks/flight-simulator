@@ -6,9 +6,12 @@
 #include <QGLBuffer>
 #include <QVector3D>
 #include "globject.h"
+#include "force.h"
 
 class QuadrotorObject : public GLObject, protected QGLFunctions
 {
+public:
+    enum ROTOR { LEFT_FRONT = 0, RIGHT_FRONT = 1, LEFT_REAR = 2, RIGHT_REAR = 3, GRAVITY = 4 };
 public:
     QuadrotorObject();
     ~QuadrotorObject();
@@ -44,6 +47,8 @@ private:
     qreal m_yaw;
     QVector3D m_center;
     QMatrix4x4 ROT;
+    Force m_forces[5];
+    qreal m_powers[4];
 };
 
 #endif // QUADROTOROBJECT_H

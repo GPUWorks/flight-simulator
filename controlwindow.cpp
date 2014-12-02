@@ -132,6 +132,8 @@ void ControlWindow::setUpVelocityGraph()
 
 void ControlWindow::setUpAngleGraph()
 {
+    ui->AnglesGLWidget->yAxis->setRange(-2, 2);
+
     ui->AnglesGLWidget->setBackground(QBrush(QColor("#e3e3e3")));
 
     ui->AnglesGLWidget->addGraph();

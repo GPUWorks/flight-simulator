@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     glcamera1stperson.cpp \
     gllight.cpp \
     quadrotorfactory.cpp \
-    quadrotorobject.cpp
+    quadrotorobject.cpp \
+    force.cpp
 
 HEADERS  += controlwindow.h \
     graphwidget.h \
@@ -47,7 +48,8 @@ HEADERS  += controlwindow.h \
     glcamera1stperson.h \
     gllight.h \
     quadrotorfactory.h \
-    quadrotorobject.h
+    quadrotorobject.h \
+    force.h
 
 FORMS    += controlwindow.ui
 

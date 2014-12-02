@@ -2,7 +2,7 @@
 #include "maincontroller.h"
 #include "registry.h"
 #include "ui_controlwindow.h"
-#include <QMetaType>
+#include <QMutexLocker>
 
 PhysicsController::PhysicsController(QObject* mainController) :
     QObject(nullptr),
@@ -11,6 +11,7 @@ PhysicsController::PhysicsController(QObject* mainController) :
 {
     MainController* controller = dynamic_cast<MainController*>(m_mainController);
     m_objects = &(controller->m_objects);
+    m_quadrotor = m_objects->front();
     m_objectsMutex = &(controller->m_objectsMutex);
     connect(m_physicsTimer.data(), SIGNAL(timeout()), this, SLOT(updatePhysicalProperties()));
     m_time = 0.0;
@@ -18,12 +19,15 @@ PhysicsController::PhysicsController(QObject* mainController) :
 
 void PhysicsController::start()
 {
-    qDebug("start physics controller");
+    //qDebug("start physics controller");
     m_physicsTimer->start(SEC / Registry::FPSphys);
 }
 
 void PhysicsController::updatePhysicalProperties()
 {
-    qDebug("physics update");
+    //qDebug("physics update");
+    QMutexLocker locker(m_objectsMutex);
+    Q_UNUSED(locker)
     m_time += (m_physicsTimer.data()->interval() / 1000.0);
+
 }

@@ -28,6 +28,7 @@ private:
     QObject* m_mainController;
     QScopedPointer<QTimer> m_physicsTimer;
     QList< QSharedPointer<GLObject> >* m_objects;
+    QSharedPointer<GLObject> m_quadrotor;
     QMutex* m_objectsMutex;
     qreal m_time;
 };

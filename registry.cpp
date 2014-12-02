@@ -7,3 +7,5 @@ qreal Registry::FPSrender = 25;
 
 qreal Registry::qoCameraViewAngle = 60;
 qreal Registry::qoCameraViewDistance = 200;
+
+qreal Registry::qoMass = 1.2;

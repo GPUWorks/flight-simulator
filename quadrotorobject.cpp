@@ -1,5 +1,6 @@
 #include "quadrotorobject.h"
 #include <QtMath>
+#include "registry.h"
 
 #define UNIT_ANGLE 6
 
@@ -7,6 +8,7 @@ QuadrotorObject::QuadrotorObject()
 {
     m_pitch = m_roll = m_yaw = 0.0;
     m_center = QVector3D(0, 5, 12);
+    m_powers[LEFT_FRONT] = m_powers[RIGHT_FRONT] = m_powers[LEFT_REAR] = m_powers[RIGHT_REAR] = 2.4525;
 }
 
 QuadrotorObject::~QuadrotorObject()
@@ -23,6 +25,26 @@ void QuadrotorObject::init()
     m_buffer.create();
     m_buffer.setUsagePattern(QGLBuffer::StaticDraw);
     m_prog.release();
+
+    m_forces[LEFT_FRONT].setPos(QVector3D(-2,10,12));
+    m_forces[LEFT_FRONT].setDirection(m_powers[LEFT_FRONT] * QVector3D(0,0,1));
+    m_forces[LEFT_FRONT].setMomentum(QVector4D(0,0,0,0));
+
+    m_forces[RIGHT_FRONT].setPos(QVector3D(2,10,12));
+    m_forces[RIGHT_FRONT].setDirection(m_powers[RIGHT_FRONT] * QVector3D(0,0,1));
+    m_forces[RIGHT_FRONT].setMomentum(QVector4D(0,0,0,0));
+
+    m_forces[LEFT_REAR].setPos(QVector3D(-2,0,12));
+    m_forces[LEFT_REAR].setDirection(m_powers[LEFT_REAR] * QVector3D(0,0,1));
+    m_forces[LEFT_REAR].setMomentum(QVector4D(0,0,0,0));
+
+    m_forces[RIGHT_REAR].setPos(QVector3D(2,0,12));
+    m_forces[RIGHT_REAR].setDirection(m_powers[RIGHT_REAR] * QVector3D(0,0,1));
+    m_forces[RIGHT_REAR].setMomentum(QVector4D(0,0,0,0));
+
+    m_forces[GRAVITY].setPos(m_center);
+    m_forces[GRAVITY].setDirection(Registry::qoMass * Registry::pcGravity * QVector3D(0,0,-1));
+    m_forces[GRAVITY].setMomentum(QVector4D(0,0,0,0));
 }
 
 void QuadrotorObject::render(QMatrix4x4 MVP, QVector3D eyePos)
